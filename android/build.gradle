@@ -1,0 +1,78 @@
+buildscript {
+    ext {
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 21
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        ndkVersion = "25.1.8937393"
+        kotlinVersion = "1.8.0"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:7.4.0")
+        classpath("com.facebook.react:react-native-gradle-plugin:0.72.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+    }
+}
+
+apply plugin: "com.android.application"
+apply plugin: "com.facebook.react.rootproject"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-android-extensions"
+
+android {
+    compileSdkVersion compileSdkVersion
+
+    defaultConfig {
+        applicationId "com.yourapp.package"
+        minSdkVersion minSdkVersion
+        targetSdkVersion targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
+    }
+
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file(MYAPP_UPLOAD_STORE_FILE)
+                storePassword MYAPP_UPLOAD_STORE_PASSWORD
+                keyAlias MYAPP_UPLOAD_KEY_ALIAS
+                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.facebook.react:react-native:+")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+}
+
+// Ensure to add your other project-specific dependencies here
+
+// To define the keystore properties, you can create a gradle.properties file in your project's root directory
+// with the following content:
+//
+// MYAPP_UPLOAD_STORE_FILE=your_keystore_file.jks
+// MYAPP_UPLOAD_STORE_PASSWORD=your_store_password
+// MYAPP_UPLOAD_KEY_ALIAS=your_key_alias
+// MYAPP_UPLOAD_KEY_PASSWORD=your_key_password
+    
